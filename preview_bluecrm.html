@@ -1,0 +1,204 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BlueCRM Chat — Preview</title>
+  <style>
+    :root{
+      --cobalt: #0047AB;
+      --light-gray: #E0E0E0;
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --muted: #6b7280;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{ margin:0; background:var(--bg); color:#111827; }
+    .app{ display:flex; height:100vh; }
+    /* Sidebar */
+    .sidebar{ width:320px; background:linear-gradient(180deg,var(--card), #f3f6fb); border-right:1px solid #e6e9ef; padding:18px; box-sizing:border-box; display:flex; flex-direction:column; gap:12px;}
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{ width:48px; height:48px; border-radius:10px; background:var(--cobalt); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:18px;}
+    .brand h1{ margin:0; font-size:18px; color:var(--cobalt); }
+    .search{ margin-top:8px; }
+    .search input{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e3e6ee; background:var(--light-gray); }
+    .contacts{ margin-top:8px; overflow:auto; flex:1; }
+    .contact{ display:flex; gap:12px; align-items:center; padding:10px; border-radius:8px; cursor:pointer; }
+    .contact:hover{ background:#f1f5fb; }
+    .avatar{ width:44px; height:44px; border-radius:50%; background:#dbe9ff; display:flex; align-items:center; justify-content:center; color:var(--cobalt); font-weight:600; }
+    .contact .meta{ display:flex; flex-direction:column; }
+    .contact .meta .name{ font-weight:600; }
+    .contact .meta .last{ font-size:12px; color:var(--muted); }
+
+    /* Main chat area */
+    .main{ flex:1; display:flex; flex-direction:column; }
+    .header{ height:72px; display:flex; align-items:center; gap:18px; padding:16px; border-bottom:1px solid #e6e9ef; background:linear-gradient(90deg, rgba(0,71,171,0.02), transparent); }
+    .header .title{ font-size:18px; font-weight:700; color:var(--cobalt); }
+    .messages{ flex:1; padding:20px; overflow:auto; background:linear-gradient(#f8fbff, transparent); }
+    .msg{ max-width:70%; margin-bottom:12px; padding:12px 14px; border-radius:14px; box-shadow:0 1px 0 rgba(0,0,0,0.03); }
+    .msg.me{ margin-left:auto; background:linear-gradient(180deg, #dbe9ff, #c6deff); color:#04204a; }
+    .msg.them{ margin-right:auto; background:#fff; color:#111827; border:1px solid #eff3fb; }
+    .composer{ height:84px; padding:12px; border-top:1px solid #e6e9ef; display:flex; align-items:center; gap:12px; background:var(--card); }
+    .composer input{ flex:1; padding:12px; border-radius:12px; border:1px solid #e3e6ee; }
+    .btn{ padding:10px 14px; border-radius:10px; background:var(--cobalt); color:white; border:none; cursor:pointer; font-weight:600; }
+    .icon-btn{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; border:1px solid #e6e9ef; background:white; cursor:pointer; }
+
+    /* Right-side details */
+    .details{ width:360px; border-left:1px solid #e6e9ef; padding:18px; box-sizing:border-box; background:linear-gradient(180deg, #fff, #f9fbff); }
+    .card{ background:var(--card); padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(2,6,23,0.04); }
+    .section{ margin-bottom:12px; }
+
+    /* Login modal preview */
+    .login-wrap{ position:fixed; right:40px; bottom:40px; width:360px; background:var(--card); border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.08); padding:18px; }
+    .login h3{ margin:0 0 8px 0; color:var(--cobalt); }
+    .login input{ width:100%; padding:12px; border-radius:8px; border:1px solid #e6e9ee; margin-bottom:8px; }
+    .login small{ color:var(--muted); }
+
+    /* responsive */
+    @media(max-width:1000px){ .details{ display:none; } }
+    @media(max-width:700px){ .sidebar{ display:none; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">BC</div>
+        <div>
+          <h1>BlueCRM Chat</h1>
+          <div style="font-size:12px; color:var(--muted)">Conversational CRM</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input placeholder="Search contacts or messages" />
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button class="btn" style="flex:1">New Message</button>
+        <button class="icon-btn" title="Broadcast">B</button>
+      </div>
+
+      <div class="contacts">
+        <div class="contact">
+          <div class="avatar">PM</div>
+          <div class="meta">
+            <div class="name">Paulo Mendes</div>
+            <div class="last">Last message: Sure! I'll send it now</div>
+          </div>
+        </div>
+        <div class="contact">
+          <div class="avatar">KC</div>
+          <div class="meta">
+            <div class="name">Karina Maia</div>
+            <div class="last">Last message: Thanks, see you tomorrow</div>
+          </div>
+        </div>
+        <div class="contact">
+          <div class="avatar">MT</div>
+          <div class="meta">
+            <div class="name">Marketing</div>
+            <div class="last">Campaign: Launch Q4</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:52px; height:52px; border-radius:10px; background:var(--cobalt); color:white; display:flex; align-items:center; justify-content:center; font-weight:700;">K</div>
+          <div>
+            <div style="font-weight:700; color:#0b3b72">Karina Maia</div>
+            <div style="font-size:12px; color:var(--muted)">Online • Last seen 10:12</div>
+          </div>
+        </div>
+        <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+          <button class="icon-btn">📎</button>
+          <button class="icon-btn">🔔</button>
+          <button class="icon-btn">⋯</button>
+        </div>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="msg them">
+          Hi Karina, your campaign report is ready. Please check the attached PDF.
+        </div>
+        <div class="msg me">
+          Great, thanks! I'll review and get back to you.
+        </div>
+        <div class="msg them">
+          Also, we scheduled the broadcast for tomorrow at 9:00.
+        </div>
+        <div class="msg me">
+          Perfect. Make sure batches are set to 100 per dispatch.
+        </div>
+        <div class="msg them">
+          Sent a sample sticker:
+          <div style="margin-top:8px;"><img src="https://via.placeholder.com/120x120.png?text=Sticker" alt="sticker" style="border-radius:8px;"/></div>
+        </div>
+      </div>
+
+      <div class="composer">
+        <button class="icon-btn">😊</button>
+        <input placeholder="Type a message or /command" />
+        <button class="icon-btn">📷</button>
+        <button class="icon-btn">🎤</button>
+        <button class="btn">Send</button>
+      </div>
+    </main>
+
+    <aside class="details">
+      <div class="card section">
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div style="width:56px; height:56px; border-radius:10px; background:#e6f0ff; display:flex; align-items:center; justify-content:center; color:var(--cobalt); font-weight:700;">K</div>
+          <div>
+            <div style="font-weight:700;">Karina Maia</div>
+            <div style="font-size:13px; color:var(--muted)">Client • Marketing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <div style="font-weight:700; margin-bottom:8px;">Contact Info</div>
+        <div style="font-size:13px; color:var(--muted);">+55 51 9XXXX-XXXX</div>
+        <div style="margin-top:8px; font-size:13px;">Tags: <strong>VIP</strong>, <strong>Q4</strong></div>
+      </div>
+
+      <div class="card section">
+        <div style="font-weight:700; margin-bottom:8px;">Agent Metrics</div>
+        <div style="display:flex; gap:8px; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between;"><div>Active convos</div><div>6</div></div>
+          <div style="display:flex; justify-content:space-between;"><div>Avg response</div><div>00:12:34</div></div>
+          <div style="display:flex; justify-content:space-between;"><div>Messages sent</div><div>1,243</div></div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <div style="font-weight:700; margin-bottom:8px;">Broadcast</div>
+        <div style="font-size:13px; color:var(--muted);">Last broadcast: Oct 30, 2025 — 3 batches, 287 recipients</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login card">
+      <h3>Sign in to BlueCRM Chat</h3>
+      <input placeholder="Phone number (E.164) or email" />
+      <input placeholder="OTP or Password" />
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="btn" style="flex:1">Sign in</button>
+        <button class="icon-btn" title="Help">?</button>
+      </div>
+      <small>Manager-only features require verified phone & 2FA.</small>
+    </div>
+  </div>
+
+  <script>
+    // Simple demo auto-scroll
+    const msgs = document.getElementById('messages');
+    msgs.scrollTop = msgs.scrollHeight;
+  </script>
+</body>
+</html>
